@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:04:13 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/18 17:00:57 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:54:12 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@
 
 void	ft_putstr(char *s, int fd);
 char	**ft_split(char const *s, char c);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif
