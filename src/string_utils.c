@@ -6,18 +6,18 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:02:40 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/18 19:53:52 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:14:20 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 void	ft_putstr(char *s, int fd)
 {
 	int	i;
 
 	i = 0;
-	while(s[i])
+	while (s[i])
 	{
 		write(fd, &s[i], 1);
 		i++;
@@ -36,4 +36,14 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:04:13 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/18 19:54:12 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:24:59 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,36 @@
 # include <sys/wait.h>
 
 # define ERROR_MESSAGE "Error\n"
-# define FILE_PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+# define ERROR_MALLOC "Error with malloc\n"
+# define ERROR_PATH "Error with the access of the path\n"
+# define ERROR_EXEC "Error with the execution of execve\n"
+# define ERROR_PIPE "Error with the creation of the pipe\n"
+# define ERROR_FORK "Error with the execution of the fork\n"
+# define ERROR_WAIT "Error with the execution of waitpid\n"
+# define ERROR_ARG "Please enter enter the right amount of arguments\n"
+# define ERROR_FILE "Error with the opening of the file\n"
 
+typedef struct s_cmd
+{
+	int		fd_in;
+	int		fd_out;
+	char	*cmd;
+	char	**env;
+}	t_cmd;
+
+typedef struct s_pipex
+{
+	int	*pids;
+	int	**pipes;
+	int	fd_in;
+	int	fd_out;
+	int	n_cmds;
+}	t_pipex;
 void	ft_putstr(char *s, int fd);
 char	**ft_split(char const *s, char c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-
+int		ft_strlen(char *str);
+char	*find_path(char **env);
+void	build_correct_path(char *path, char *cmd, char *correct_path);
+char	*find_correct_path(char **path, char *cmd);
 #endif

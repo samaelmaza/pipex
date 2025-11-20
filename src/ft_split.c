@@ -6,11 +6,11 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:13:07 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/18 12:11:38 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:33:52 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 static int	is_sep(const char c, char sep)
 {
