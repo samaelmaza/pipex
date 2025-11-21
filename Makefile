@@ -19,7 +19,12 @@ RESET = \033[0m
 SRCS = $(SRC_DIR)/main.c \
 		$(SRC_DIR)/string_utils.c \
 		$(SRC_DIR)/ft_split.c \
-		$(SRC_DIR)/build_path.c
+		$(SRC_DIR)/build_path.c \
+		$(SRC_DIR)/error_and_close.c \
+		$(SRC_DIR)/here_doc.c \
+		$(SRC_DIR)/init.c \
+		$(SRC_DIR)/pipex.c \
+
 GNL_SRCS = $(GNL_DIR)/get_next_line.c \
 		$(GNL_DIR)/get_next_line_utils.c
 
@@ -67,7 +72,7 @@ fclean: clean
 		echo "$(RED)$(NAME) removed.$(RESET)"; \
 	fi
 
-test-2:
+test-2: all
 	@echo "$(BLUE)Creating in.txt...$(RESET)"
 	echo "ligne 1\nligne 2\nligne 3" > in.txt
 	@echo "$(BLUE)Running pipex...$(RESET)"
@@ -75,7 +80,7 @@ test-2:
 	@echo "$(GREEN)Test finished. Content of out.txt:$(RESET)"
 	@cat out.txt
 
-test-3:
+test-3: all
 	@echo "$(BLUE)Creating in.txt...$(RESET)"
 	echo "apple\nbanana\ncherry\napple\nbanana\napple" > in.txt
 	@echo "$(BLUE)Running pipex...$(RESET)"
@@ -83,7 +88,7 @@ test-3:
 	@echo "$(GREEN)Test finished. Content of out.txt:$(RESET)"
 	@cat out.txt
 
-test-4:
+test-4: all
 	@echo "$(BLUE)Creating in.txt...$(RESET)"
 	echo "apple\nbanana\ncherry\napple\nbanana\napple\ncherry\ndate" > in.txt
 	@echo "$(BLUE)Running pipex...$(RESET)"

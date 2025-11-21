@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:37:03 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/21 01:43:39 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 12:53:01 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*find_path(char **env)
 	char	*path;
 
 	i = 0;
+	path = NULL;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)

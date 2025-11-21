@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:04:13 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/21 01:42:47 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 12:50:42 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_pipex
 	int	n_cmds;
 	int	is_here_doc;
 }	t_pipex;
+
 void	ft_putstr(char *s, int fd);
 char	**ft_split(char const *s, char c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -55,4 +56,19 @@ int		ft_strlen(char *str);
 char	*find_path(char **env);
 void	build_correct_path(char *path, char *cmd, char *correct_path);
 char	*find_correct_path(char **path, char *cmd);
+int		check_here_doc(int ac, char **av);
+int		is_limiter(char *line, char *limiter);
+int		handle_here_doc(char *limiter);
+void	init_pipex(t_pipex *px, int n_cmds);
+void	prepare_commands(t_cmd *cmds, t_pipex *px, char **av, char **env);
+void	run_command(char *cmd, char **env);
+pid_t	fork_command(t_cmd *cmd, int *pipe_prev, int *pipe_next, t_pipex *px);
+void	launch_all(t_pipex *px, t_cmd *cmd);
+void	wait_all(t_pipex *px);
+void	open_files(t_pipex *px, char **av, int ac, int is_here_doc);
+void	error(char *s);
+void	free_split(char **args);
+void	close_pipes(t_pipex *px, t_cmd *cmd);
+void	close_all(t_pipex *px);
+
 #endif
