@@ -1,10 +1,11 @@
 NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I./include
+INCLUDES = -I./include -I./gnl
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = include
+GNL_DIR = gnl
 
 RED = \033[0;31m
 GREEN = \033[0;32m
@@ -19,8 +20,14 @@ SRCS = $(SRC_DIR)/main.c \
 		$(SRC_DIR)/string_utils.c \
 		$(SRC_DIR)/ft_split.c \
 		$(SRC_DIR)/build_path.c
+GNL_SRCS = $(GNL_DIR)/get_next_line.c \
+		$(GNL_DIR)/get_next_line_utils.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+GNL_OBJS = $(GNL_SRCS:$(GNL_DIR)/%.c=$(OBJ_DIR)/gnl/%.o)
+
+ALL_OBJS = $(OBJS) $(GNL_OBJS)
+
 HEADERS = $(INC_DIR)/pipex.h
 
 all: $(NAME)
@@ -32,9 +39,14 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS) | $(OBJ_DIR)
 	@echo "$(YELLOW)Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(NAME): $(OBJS)
+$(OBJ_DIR)/gnl/%.o: $(GNL_DIR)/%.c $(GNL_DIR)/get_next_line.h
+	@mkdir -p $(OBJ_DIR)/gnl
+	@$(CC) $(CFLAGS) -I$(GNL_DIR) -c $< -o $@
+	@echo "$(CYAN)Compiling GNL: $<$(RESET)"
+
+$(NAME): $(ALL_OBJS)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(ALL_OBJS) -o $(NAME)
 	@echo "$(GREEN)✓ $(NAME) compiled successfully!$(RESET)"
 
 clean:

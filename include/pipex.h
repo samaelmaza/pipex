@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:04:13 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/20 22:24:59 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 01:42:47 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include "../gnl/get_next_line.h"
 
 # define ERROR_MESSAGE "Error\n"
 # define ERROR_MALLOC "Error with malloc\n"
@@ -45,6 +46,7 @@ typedef struct s_pipex
 	int	fd_in;
 	int	fd_out;
 	int	n_cmds;
+	int	is_here_doc;
 }	t_pipex;
 void	ft_putstr(char *s, int fd);
 char	**ft_split(char const *s, char c);

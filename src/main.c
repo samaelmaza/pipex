@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 11:59:37 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/20 22:29:42 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 01:43:17 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,19 @@ void	init_pipex(t_pipex *px, int n_cmds)
 void	prepare_commands(t_cmd *cmds, t_pipex *px, char **av, char **env)
 {
 	int	i;
+	int	offset;
 
 	i = 0;
+	if(px->is_here_doc)
+		offset = 3;
+	else
+		offset = 2;
 	while (i < px->n_cmds)
 	{
 		cmds[i].fd_in = px->fd_in;
 		cmds[i].fd_out = px->fd_out;
 		cmds[i].env = env;
-		cmds[i].cmd = av[2 + i];
+		cmds[i].cmd = av[offset + i];
 		i++;
 	}
 }
@@ -178,21 +183,80 @@ void	wait_all(t_pipex *px)
 	}
 }
 
+int	check_here_doc(int ac, char **av)
+{
+	if (ac >= 2 && ft_strncmp(av[1], "here_doc", 8) == 0)
+	{
+		if (ac < 6)
+			error(ERROR_ARG);
+		return (1);
+	}
+	if (ac < 5)
+		error(ERROR_ARG);
+	return (0);
+}
+
+int	is_limiter(char *line, char *limiter)
+{
+	int	len;
+
+	len = ft_strlen(limiter);
+	if(ft_strncmp(line, limiter, len) == 0 && line[len] == '\n')
+		return (1);
+	return (0);
+}
+int	handle_here_doc(char *limiter)
+{
+	int		pipefd[2];
+	char	*line;
+
+	if(pipe(pipefd) < 0)
+		error(ERROR_PIPE);
+	while(1)
+	{
+		write(STDOUT_FILENO, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if(!line || is_limiter(line, limiter))
+		{
+			free(line);
+			break;
+		}
+		write(pipefd[1], line, ft_strlen(line));
+		free(line);
+	}
+	close(pipefd[1]);
+	return (pipefd[0]);
+}
+
+void	open_files(t_pipex *px, char **av, int ac, int is_here_doc)
+{
+	if(is_here_doc)
+	{
+		px->fd_in = handle_here_doc(av[2]);
+		px->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	}
+	else
+	{
+		px->fd_in = open(av[1], O_RDONLY);
+		if(px->fd_in < 0)
+			error(ERROR_FILE);
+		px->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (px->fd_out < 0)
+			error(ERROR_FILE);
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	int		n_cmd;
 	t_cmd	*cmds;
 	t_pipex	px;
 
-	if (ac < 5)
-		error(ERROR_ARG);
+	px.is_here_doc = check_here_doc(ac, av);
 	n_cmd = ac - 3;
-	px.fd_in = open(av[1], O_RDONLY);
-	if(px.fd_in < 0)
-		error(ERROR_FILE);
-	px.fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (px.fd_out < 0)
-		error(ERROR_FILE);
+	if(px.is_here_doc)
+		n_cmd = ac - 4;
+	open_files(&px, av, ac, px.is_here_doc);
 	init_pipex(&px, n_cmd);
 	cmds = malloc(sizeof(t_cmd) * n_cmd);
 	if (!cmds)
