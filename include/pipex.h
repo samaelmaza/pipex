@@ -6,7 +6,7 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:04:13 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/21 12:50:42 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 15:54:04 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	prepare_commands(t_cmd *cmds, t_pipex *px, char **av, char **env);
 void	run_command(char *cmd, char **env);
 pid_t	fork_command(t_cmd *cmd, int *pipe_prev, int *pipe_next, t_pipex *px);
 void	launch_all(t_pipex *px, t_cmd *cmd);
-void	wait_all(t_pipex *px);
+int		wait_all(t_pipex *px);
 void	open_files(t_pipex *px, char **av, int ac, int is_here_doc);
 void	error(char *s);
 void	free_split(char **args);

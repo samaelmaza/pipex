@@ -6,11 +6,23 @@
 /*   By: sreffers <sreffers@student.42madrid.c>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:42:53 by sreffers          #+#    #+#             */
-/*   Updated: 2025/11/21 12:45:36 by sreffers         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:26:00 by sreffers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+int	is_cmd_empty(char *cmd)
+{
+	int		i;
+
+	i = 0;
+	while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
+		i++;
+	if (!cmd[i])
+		return (1);
+	return (0);
+}
 
 void	run_command(char *cmd, char **env)
 {
@@ -40,6 +52,11 @@ pid_t	fork_command(t_cmd *cmd, int *pipe_prev, int *pipe_next, t_pipex *px)
 {
 	pid_t	pid;
 
+	if (is_cmd_empty(cmd->cmd))
+	{
+		ft_putstr(ERROR_ARG, STDERR_FILENO);
+		exit(127);
+	}
 	pid = fork();
 	if (pid < 0)
 		error(ERROR_FORK);
@@ -80,16 +97,21 @@ void	launch_all(t_pipex *px, t_cmd *cmd)
 	}
 }
 
-void	wait_all(t_pipex *px)
+int	wait_all(t_pipex *px)
 {
 	int	i;
 	int	status;
+	int	exit_code;
 
 	i = 0;
+	exit_code = 0;
 	while (i < px->n_cmds)
 	{
 		if (waitpid(px->pids[i], &status, 0) < 0)
 			error(ERROR_WAIT);
+		if (status != 0)
+			exit_code = 1;
 		i++;
 	}
+	return (exit_code);
 }
